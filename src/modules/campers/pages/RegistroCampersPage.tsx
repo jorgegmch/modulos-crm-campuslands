@@ -67,7 +67,12 @@ export default function RegistroCampersPage() {
                         onClick={() => setMenuCampersAbierto(!menuCampersAbierto)}
                     >
                         <div className={styles.item_menu_info}><span>🎓</span> Campers</div>
-                        <span className={`${styles.flecha} ${menuCampersAbierto ? styles.flecha_arriba : ''}`}>▼</span>
+                        <span 
+                            className={`${styles.flecha} ${menuCampersAbierto ? styles.flecha_arriba : ''}`}
+                            style={{ fontSize: '20px', opacity: 0.8 }}
+                        >
+                            ⌄
+                        </span>
                     </div>
                     
                     {menuCampersAbierto && (
@@ -87,7 +92,12 @@ export default function RegistroCampersPage() {
                         onClick={() => setMenuContratosAbierto(!menuContratosAbierto)}
                     >
                         <div className={styles.item_menu_info}><span>📝</span> Contratos</div>
-                        <span className={`${styles.flecha} ${menuContratosAbierto ? styles.flecha_arriba : ''}`}>▼</span>
+                        <span 
+                            className={`${styles.flecha} ${menuCampersAbierto ? styles.flecha_arriba : ''}`}
+                            style={{ fontSize: '20px', opacity: 0.8 }}
+                        >
+                            ⌄
+                        </span>
                     </div>
 
                     <div className={styles.item_menu}><span>🧾</span> Facturacion</div>
