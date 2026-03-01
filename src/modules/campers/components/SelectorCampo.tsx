@@ -1,16 +1,15 @@
-// import React from "react";
 import styles from "../styles/RegistroCampers.module.css";
 
-interface OpcionSelector {
+interface Opcion {
     valor_opcion: string;
     etiqueta_opcion: string;
 }
 
-interface SelectorCampoProps {
+interface Props {
     id_campo: string;
     etiqueta_campo: string;
     valor_seleccionado: string;
-    opciones_disponibles: OpcionSelector[];
+    opciones_disponibles: Opcion[];
     manejar_cambio: (valor: string) => void;
 }
 
@@ -19,26 +18,24 @@ export default function SelectorCampo({
     etiqueta_campo,
     valor_seleccionado,
     opciones_disponibles,
-    manejar_cambio,
-}: SelectorCampoProps) {
+    manejar_cambio
+}: Props) {
     return (
-        <div className={styles.grupo_campo}>
-            <label htmlFor={id_campo} className={styles.etiqueta_campo}>
+        <div className={styles.campo}>
+            <label htmlFor={id_campo} className={styles.label}>
                 {etiqueta_campo}
             </label>
+
             <select
                 id={id_campo}
-                className={styles.selector_campo}
+                className={styles.select_estilizado}
                 value={valor_seleccionado}
                 onChange={(e) => manejar_cambio(e.target.value)}
-                aria-label={etiqueta_campo}
             >
-                <option value="" disabled>
-                    Seleccione una opción
-                </option>
-                {opciones_disponibles.map((opcion) => (
-                    <option key={opcion.valor_opcion} value={opcion.valor_opcion}>
-                        {opcion.etiqueta_opcion}
+                <option value="">Selecciona una opción</option>
+                {opciones_disponibles.map(op => (
+                    <option key={op.valor_opcion} value={op.valor_opcion}>
+                        {op.etiqueta_opcion}
                     </option>
                 ))}
             </select>

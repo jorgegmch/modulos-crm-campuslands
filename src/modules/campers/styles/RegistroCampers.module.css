@@ -1,189 +1,38 @@
-/* ==================== LAYOUT GENERAL ==================== */
-.layout_principal {
-    display: flex;
+.wrapper_registro {
     width: 100%;
-    min-height: 100vh;
-    background-color: #1b2431; /* Fondo ultra oscuro original */
-    color: white;
-    font-family: 'Inter', sans-serif;
-}
-
-.sidebar_simulada {
-    width: 260px; /* Medida precisa del sidebar */
-    background-color: #273142;
-    flex-shrink: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 24px 16px;
-    height: 100vh;
-    position: sticky;
-    top: 0;
 }
 
-.contenedor_derecho {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-}
+.titulo_formulario {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 28px;
 
-/* ==================== SIDEBAR Y MENÚ ==================== */
-.contenedor_logo {
-    padding: 0 0 40px 12px;
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-.logo_texto { color: #38bdf8; }
-.logo_resaltado { color: #ffffff; }
-
-.menu_navegacion {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.item_menu, .item_menu_desplegable {
-    padding: 10px 12px;
-    border-radius: 10px;
-    cursor: pointer;
     color: white;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.item_menu_desplegable { justify-content: space-between; }
-
-.item_menu:hover, .item_menu_desplegable:hover {
-    background-color: #705cf6;
-    color: white;
-}
-
-.flecha {
-    display: inline-block;
-}
-
-.sub_item {
-    padding: 8px 12px 8px 42px;
-    color: #64748b;
-    font-size: 0.9rem;
-    cursor: pointer;
-    border-radius: 8px;
-    margin: 2px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.sub_item {
-    /* background-color: #6366f1; */
-    color: white;
-    transition: all 0.2s ease;
-}
-
-.sub_item:hover {
-    background-color: #705cf6;
-    color: white;
-}
-
-
-.boton_cerrar_sesion {
-    margin-top: auto;
-    padding: 16px 12px;
-    color: #94a3b8;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.95rem;
-    border-top: 1px solid #23262f;
-}
-
-/* ==================== HEADER Y ÁREA DE CONTENIDO ==================== */
-.header_simulado {
-    height: 64px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0 40px;
-    background-color: #273142;
-}
-
-.perfil_usuario { display: flex; align-items: center; gap: 12px; }
-.info_texto { display: flex; flex-direction: column; text-align: right; }
-.nombre_usuario { font-size: 0.85rem; font-weight: 600; color: white; }
-.rol_usuario { font-size: 0.75rem; color: #64748b; }
-.avatar_circulo { width: 32px; height: 32px; background-color: #334155; border-radius: 50%; }
-
-.area_contenido {
-    padding: 20px 40px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
 }
 
 .tarjeta_formulario {
     background-color: #273142;
-    padding: 32px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 900px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.titulo_formulario {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 32px;
-    color: white;
-}
-
-/* ==================== GRID Y CAMPOS (CLAVE DEL ÉXITO) ==================== */
-.grid_formulario {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px 24px;
-}
-
-.grupo_campo {
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    align-items: center; 
 }
 
-.etiqueta_campo {
-    font-size: 0.85rem;
-    color: #94a3b8;
-    font-weight: 500;
+.grid_formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 24px 32px;
+    width: 100%;
+    max-width: 1000px; 
+    justify-content: center;
 }
 
-.input_campo, .selector_campo, .textarea_campo {
-    background-color: #323d4e;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: white;
-    font-size: 0.9rem;
-    outline: none;
-    
-    transition: border-color 0.2s;
-}
-
-.input_campo:focus, .selector_campo:focus {
-    border-color: #6366f1;
-}
-
-.textarea_campo {
-    min-height: 100px;
-    resize: none;
-}
-
-/* ==================== FOTO Y BOTÓN ==================== */
+/* FOTO */
 .contenedor_foto {
     grid-column: span 2;
     display: flex;
@@ -192,51 +41,86 @@
     margin-bottom: 10px;
 }
 
-.circulo_foto {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    border: none;
+.avatar_preview {
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    background-color: #d1d5db;
+    margin-bottom: 10px;
+}
+
+.editar_foto {
+    color: #38bdf8;
+    font-size: 0.9rem;
     cursor: pointer;
-    position: relative;
 }
 
-.imagen_preview { width: 100%; height: 100%; object-fit: cover; }
-.input_oculto { display: none; }
-
-.texto_foto {
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: #6366f1;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.columna_completa { grid-column: span 2; }
-
-.contenedor_boton {
-    grid-column: span 2;
+/* INPUTS */
+.campo {
     display: flex;
-    justify-content: center;
-    margin-top: 10px;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
 }
 
-.boton_accion {
-    background-color: #6366f1;
-    color: white;
+.label {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+}
+
+.input_estilizado,
+.select_estilizado,
+.textarea_estilizado {
+    background-color: #1f2937;
     border: none;
-    padding: 14px 40px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.1s, background-color 0.2s;
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.2s;
 }
 
-.boton_accion:hover { background-color: #4f46e5; }
-.boton_accion:active { transform: scale(0.98); }
+.select_estilizado {
+    cursor: pointer;
+}
+
+.input_estilizado:focus,
+.select_estilizado:focus,
+.textarea_estilizado:focus {
+    border: 1px solid #705cf6;
+}
+
+.textarea_estilizado {
+    resize: none;
+    height: 90px;
+}
+
+.columna_completa {
+    grid-column: span 2;
+}
+
+/* BOTÓN */
+.boton_registro {
+    grid-column: span 2;
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 10px;
+    background-color: #705cf6;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.2s;
+    justify-self: center;
+}
+
+.boton_registro:hover {
+    background-color: #5b49d4;
+}
+
+.boton_registro:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

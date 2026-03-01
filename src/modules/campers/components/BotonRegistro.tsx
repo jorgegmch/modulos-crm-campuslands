@@ -1,27 +1,18 @@
-// import React from "react";
 import styles from "../styles/RegistroCampers.module.css";
 
-interface BotonRegistroProps {
+interface Props {
     etiqueta_boton: string;
-    tipo_boton?: "button" | "submit";
     deshabilitado?: boolean;
 }
 
-export default function BotonRegistro({
-    etiqueta_boton,
-    tipo_boton = "submit",
-    deshabilitado = false,
-}: BotonRegistroProps) {
+export default function BotonRegistro({ etiqueta_boton, deshabilitado }: Props) {
     return (
-        <div className={styles.contenedor_boton}>
-            <button
-                type={tipo_boton}
-                className={styles.boton_accion}
-                disabled={deshabilitado}
-                aria-label={etiqueta_boton}
-            >
-                {etiqueta_boton}
-            </button>
-        </div>
+        <button
+            type="submit"
+            disabled={deshabilitado}
+            className={styles.boton_registro}
+        >
+            {etiqueta_boton}
+        </button>
     );
 }
