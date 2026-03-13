@@ -28,16 +28,32 @@ export default function RegistroCampersPage() {
     const enviar = async (e: React.FormEvent) => {
         e.preventDefault();
         setProcesando(true);
-        setTimeout(() => {
-            console.log("Datos:", formulario);
-            alert("¡Registro exitoso!");
+        
+        try {
+            const respuesta = await fetch("http://localhost:4000/campers", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formulario),
+            });
+
+            if (respuesta.ok) {
+                alert("¡Camper registrado exitosamente en la base de datos!");
+                setFormulario(estadoInicial); // Limpia el formulario para el siguiente registro
+            } else {
+                throw new Error("Error en el servidor");
+            }
+        } catch (error) {
+            console.error("Error conectando con la BD:", error);
+            alert("No se pudo conectar con la base de datos. ¿Está encendido el servidor?");
+        } finally {
             setProcesando(false);
-            setFormulario(estadoInicial);
-        }, 1000);
+        }
     };
 
     return (
-        <div className={styles.wrapper_registro}> {/* Contenedor para controlar el título y la tarjeta */}
+        <div className={styles.wrapper_registro}>
             <h1 className={styles.titulo_formulario}>Registro de Campers</h1>
             <div className={styles.tarjeta_formulario}>
                 <form onSubmit={enviar} className={styles.grid_formulario}>
@@ -57,7 +73,8 @@ export default function RegistroCampersPage() {
                         valor_seleccionado={formulario.jornada_interes}
                         opciones_disponibles={[
                             {valor_opcion: "manana", etiqueta_opcion: "Mañana"},
-                            {valor_opcion: "tarde", etiqueta_opcion: "Tarde"}
+                            {valor_opcion: "tarde", etiqueta_opcion: "Tarde"},
+                            {valor_opcion: "noche", etiqueta_opcion: "Noche"}
                         ]}
                         manejar_cambio={(v) => actualizar("jornada_interes", v)} 
                     />
@@ -67,9 +84,12 @@ export default function RegistroCampersPage() {
                         etiqueta_campo="Estado" 
                         valor_seleccionado={formulario.estado}
                         opciones_disponibles={[
-                            {valor_opcion: "activo", etiqueta_opcion: "Activo"},
-                            {valor_opcion: "inactivo", etiqueta_opcion: "Inactivo"},
-                            {valor_opcion: "en_proceso", etiqueta_opcion: "En Proceso"}
+                            {valor_opcion: "registrado", etiqueta_opcion: "Registrado"},
+                            {valor_opcion: "preseleccionado", etiqueta_opcion: "Pre-seleccionado"},
+                            {valor_opcion: "admitido", etiqueta_opcion: "Admitido"},
+                            {valor_opcion: "rechazado", etiqueta_opcion: "Rechazado"},
+                            {valor_opcion: "agendado", etiqueta_opcion: "Agendado"},
+                            {valor_opcion: "activo", etiqueta_opcion: "Activo"}
                         ]}
                         manejar_cambio={(v) => actualizar("estado", v)} 
                     />
