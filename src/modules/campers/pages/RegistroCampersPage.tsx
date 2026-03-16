@@ -131,9 +131,15 @@ export default function RegistroCampersPage() {
                         etiqueta_campo="Estado" 
                         valor_seleccionado={formulario.estado}
                         opciones_disponibles={[
+                            {valor_opcion: "activo", etiqueta_opcion: "Activo"},
+                            {valor_opcion: "inactivo", etiqueta_opcion: "Inactivo"},
+                            {valor_opcion: "en_proceso", etiqueta_opcion: "En Proceso"},
                             {valor_opcion: "registrado", etiqueta_opcion: "Registrado"},
                             {valor_opcion: "preseleccionado", etiqueta_opcion: "Pre-seleccionado"},
-                            {valor_opcion: "admitido", etiqueta_opcion: "Admitido"}
+                            {valor_opcion: "admitido", etiqueta_opcion: "Admitido"},
+                            {valor_opcion: "rechazado", etiqueta_opcion: "Rechazado"},
+                            {valor_opcion: "agendado", etiqueta_opcion: "Agendado"},
+                            {valor_opcion: "activo", etiqueta_opcion: "Activo"}
                         ]}
                         manejar_cambio={(v) => actualizar("estado", v)} 
                     />
