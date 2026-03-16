@@ -15,17 +15,52 @@ export default function SubidaFoto({ foto_actual, manejar_cambio_foto }: Props) 
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            // Scrum Master Note: Convertimos a Base64 para que el JSON sea portable
-            const lector = new FileReader();
-            lector.onloadend = () => {
-                const base64 = lector.result as string;
-                manejar_cambio_foto(base64);
+    const file = e.target.files?.[0];
+    if (file) {
+        const lector = new FileReader();
+        lector.readAsDataURL(file);
+        
+        lector.onload = (event) => {
+            const img = new Image();
+            img.src = event.target?.result as string;
+
+            img.onload = () => {
+                // 1. Creamos un canvas para redimensionar
+                const canvas = document.createElement("canvas");
+                const MAX_WIDTH = 400; // Tamaño máximo de ancho
+                const MAX_HEIGHT = 400; // Tamaño máximo de alto
+                let width = img.width;
+                let height = img.height;
+
+                // 2. Calculamos las nuevas proporciones
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                // 3. Dibujamos la imagen optimizada
+                const ctx = canvas.getContext("2d");
+                ctx?.drawImage(img, 0, 0, width, height);
+
+                // 4. Convertimos a Base64 con calidad reducida (0.7 es excelente balance)
+                // Usamos image/jpeg porque el base64 es mucho más corto que en PNG
+                const base64Optimizado = canvas.toDataURL("image/jpeg", 0.7);
+                
+                manejar_cambio_foto(base64Optimizado);
             };
-            lector.readAsDataURL(file);
-        }
-    };
+        };
+    }
+};
 
     return (
         <div className={styles.contenedor_foto}>

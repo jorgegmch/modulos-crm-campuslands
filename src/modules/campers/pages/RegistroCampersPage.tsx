@@ -1,27 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/RegistroCampers.module.css";
-import type { Camper } from "../types/campers_types";
 import InputCampo from "../components/InputCampo";
 import SelectorCampo from "../components/SelectorCampo";
 import SubidaFoto from "../components/SubidaFoto";
 import BotonRegistro from "../components/BotonRegistro";
 
+type RolUsuario = "admin" | "master" | "comercial";
+
 export default function RegistroCampersPage() {
-    const estadoInicial: Camper = {
+    // SIMULACIÓN DE LOGIN
+    const rolUsuarioActual: RolUsuario = "comercial"; 
+    const nombreUsuarioActual = "Victor Guzman"; 
+
+    const estadoInicial = {
         nombre_completo: "",
         direccion_residencia: "",
         telefono: "",
         correo_electronico: "",
         jornada_interes: "",
         estado: "",
-        observaciones: "",
+        observaciones: "", 
         foto_perfil: "",
+        comercial_asignado: "", 
     };
 
-    const [formulario, setFormulario] = useState<Camper>(estadoInicial);
+    const [formulario, setFormulario] = useState(estadoInicial);
     const [procesando, setProcesando] = useState(false);
+    const [comercialesDisponibles, setComercialesDisponibles] = useState<{valor_opcion: string, etiqueta_opcion: string}[]>([]);
 
-    const actualizar = (campo: keyof Camper, valor: string) => {
+    useEffect(() => {
+        if (rolUsuarioActual === "admin" || rolUsuarioActual === "master") {
+            const cargarComerciales = async () => {
+                try {
+                    const respuesta = await fetch("http://localhost:4000/comerciales");
+                    if (!respuesta.ok) throw new Error("No se pudieron cargar los comerciales");
+                    
+                    const datos = await respuesta.json();
+                    const opcionesFormateadas = datos.map((c: any) => ({
+                        valor_opcion: c.nombre,
+                        etiqueta_opcion: c.nombre
+                    }));
+
+                    setComercialesDisponibles(opcionesFormateadas);
+                } catch (error) {
+                    console.error("Error cargando comerciales:", error);
+                }
+            };
+            cargarComerciales();
+        }
+    }, [rolUsuarioActual]);
+
+    const actualizar = (campo: string, valor: string) => {
         setFormulario(prev => ({ ...prev, [campo]: valor }));
     };
 
@@ -30,23 +59,41 @@ export default function RegistroCampersPage() {
         setProcesando(true);
         
         try {
+            const { observaciones, ...restoDatos } = formulario;
+
+            // LÓGICA DE ASIGNACIÓN AUTOMÁTICA
+            const comercialFinal = rolUsuarioActual === "comercial" 
+                ? nombreUsuarioActual 
+                : formulario.comercial_asignado;
+
+            const leadAEnviar = {
+                ...restoDatos,
+                comercial_asignado: comercialFinal,
+                historial_observaciones: [
+                    {
+                        id_evento: crypto.randomUUID(),
+                        fecha: new Date().toISOString(),
+                        autor: nombreUsuarioActual,
+                        texto: observaciones
+                    }
+                ]
+            };
+
             const respuesta = await fetch("http://localhost:4000/campers", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formulario),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(leadAEnviar),
             });
 
             if (respuesta.ok) {
-                alert("¡Camper registrado exitosamente en la base de datos!");
-                setFormulario(estadoInicial); // Limpia el formulario para el siguiente registro
+                alert(`¡Registro exitoso! Asignado a: ${comercialFinal}`);
+                setFormulario(estadoInicial);
             } else {
                 throw new Error("Error en el servidor");
             }
         } catch (error) {
-            console.error("Error conectando con la BD:", error);
-            alert("No se pudo conectar con la base de datos. ¿Está encendido el servidor?");
+            console.error("Error:", error);
+            alert("Error al conectar con la base de datos. Verifica que json-server esté corriendo.");
         } finally {
             setProcesando(false);
         }
@@ -86,16 +133,25 @@ export default function RegistroCampersPage() {
                         opciones_disponibles={[
                             {valor_opcion: "registrado", etiqueta_opcion: "Registrado"},
                             {valor_opcion: "preseleccionado", etiqueta_opcion: "Pre-seleccionado"},
-                            {valor_opcion: "admitido", etiqueta_opcion: "Admitido"},
-                            {valor_opcion: "rechazado", etiqueta_opcion: "Rechazado"},
-                            {valor_opcion: "agendado", etiqueta_opcion: "Agendado"},
-                            {valor_opcion: "activo", etiqueta_opcion: "Activo"}
+                            {valor_opcion: "admitido", etiqueta_opcion: "Admitido"}
                         ]}
                         manejar_cambio={(v) => actualizar("estado", v)} 
                     />
 
+                    {(rolUsuarioActual === "admin" || rolUsuarioActual === "master") && (
+                        <div className={styles.columna_completa}>
+                            <SelectorCampo 
+                                id_campo="asignacion" 
+                                etiqueta_campo="Asignar a un Comercial (Obligatorio)" 
+                                valor_seleccionado={formulario.comercial_asignado}
+                                opciones_disponibles={comercialesDisponibles}
+                                manejar_cambio={(v) => actualizar("comercial_asignado", v)} 
+                            />
+                        </div>
+                    )}
+
                     <div className={styles.columna_completa}>
-                        <InputCampo id_campo="obs" etiqueta_campo="Observaciones" es_multilinea valor_input={formulario.observaciones} manejar_cambio={(v) => actualizar("observaciones", v)} />
+                        <InputCampo id_campo="obs" etiqueta_campo="Observación" es_multilinea valor_input={formulario.observaciones} manejar_cambio={(v) => actualizar("observaciones", v)} />
                     </div>
 
                     <BotonRegistro etiqueta_boton={procesando ? "Guardando..." : "Completar Registro"} deshabilitado={procesando} />
